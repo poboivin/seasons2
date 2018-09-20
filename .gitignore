@@ -1,0 +1,6 @@
+*.sln
+Season Survival/Library/
+*.csproj
+Season Survival/.vs/
+Season Survival/Temp/
+Season Survival/obj/
