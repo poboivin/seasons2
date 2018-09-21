@@ -7,6 +7,12 @@ public class Player : MonoBehaviour
     public ResourceInventory Inventory;
     private Rigidbody rb;
     public float PickUpRange = 2;
+    public float MaxSpeed = 2;
+    private Vector3 CurrentSpeed;
+    public float Acceleration = 1;
+    [Range(0,1)]
+    public float Friction = 0.9f;
+
     // Use this for initialization
     public void Start ()
     {
@@ -20,8 +26,35 @@ public class Player : MonoBehaviour
     public void Update()
     {
         Vector3 dir = Vector3.zero;
-        dir +=  new Vector3(Input.GetAxis("Horizontal"),0,Input.GetAxis("Vertical"));
-        rb.AddForce(dir, ForceMode.Acceleration);
+       // dir +=  new Vector3(Input.GetAxis("Horizontal"),0,Input.GetAxis("Vertical"));
+
+        if(Input.GetAxis("Horizontal") != 0)
+        {
+            if(CurrentSpeed.x < MaxSpeed)
+                CurrentSpeed.x += Acceleration *Time.deltaTime * Input.GetAxis("Horizontal");
+
+        }
+        else
+        {
+            CurrentSpeed = new Vector3(CurrentSpeed.x * Friction , CurrentSpeed.y, CurrentSpeed.z);
+        }
+        if (Input.GetAxis("Vertical") != 0)
+        {
+            if (CurrentSpeed.z < MaxSpeed)
+                CurrentSpeed.z += Acceleration * Time.deltaTime * Input.GetAxis("Vertical");
+
+        }
+        else
+        {
+            CurrentSpeed = new Vector3(CurrentSpeed.x , CurrentSpeed.y, CurrentSpeed.z *  Friction);
+
+
+        }
+
+
+        rb.MovePosition(transform.position += CurrentSpeed);
+        //0.
+      //  rb.AddForce(dir, ForceMode.Acceleration);
 
 
         if (Input.GetKeyDown(KeyCode.B))
