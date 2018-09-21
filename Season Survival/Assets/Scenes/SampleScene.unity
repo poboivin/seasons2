@@ -615,6 +615,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Inventory: {fileID: 565994270}
   PickUpRange: 1.2
+  MaxSpeed: 2
+  Acceleration: 0
+  Friction: 0.9
 --- !u!65 &565994272
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1102,6 +1105,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Inventory: {fileID: 1411043775}
   PickUpRange: 1.2
+  MaxSpeed: 2
+  Acceleration: 1
+  Friction: 0
 --- !u!65 &1411043777
 BoxCollider:
   m_ObjectHideFlags: 0
