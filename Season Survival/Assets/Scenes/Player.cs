@@ -7,11 +7,12 @@ public class Player : MonoBehaviour
     public ResourceInventory Inventory;
     private Rigidbody rb;
     public float PickUpRange = 2;
-    public float MaxSpeed = 2;
+    public float MaxSpeed = 0.5f;
     private Vector3 CurrentSpeed;
-    public float Acceleration = 1;
+    public float Acceleration = 0.2f;
     [Range(0,1)]
     public float Friction = 0.9f;
+    public float InvPercent;
 
     // Use this for initialization
     public void Start ()
@@ -24,6 +25,12 @@ public class Player : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawLine(transform.position, transform.position+ CurrentSpeed *10);
     }
+
+    public void calcInvPercent()
+    {
+        InvPercent = Inventory.CurrentResource / Inventory.MaxResource;
+    }
+
     // Update is called once per frame
     public void Update()
     {
@@ -106,6 +113,10 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.H))
         {
+            /*while (CurrentSpeed.x < MaxSpeed && CurrentSpeed.z < MaxSpeed)
+            {
+                CurrentSpeed *= 4;
+            }*/
             CurrentSpeed *= 4;
         }
     }

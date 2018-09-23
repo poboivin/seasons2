@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.574817, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -618,6 +618,7 @@ MonoBehaviour:
   MaxSpeed: 2
   Acceleration: 0
   Friction: 0.9
+  InvPercent: 0
 --- !u!65 &565994272
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1108,6 +1109,7 @@ MonoBehaviour:
   MaxSpeed: 2
   Acceleration: 1
   Friction: 0
+  InvPercent: 0
 --- !u!65 &1411043777
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1244,6 +1246,7 @@ GameObject:
   - component: {fileID: 1622378256}
   - component: {fileID: 1622378255}
   - component: {fileID: 1622378254}
+  - component: {fileID: 1622378258}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -1320,6 +1323,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1622378258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1622378253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba10a885be703874aacc2dfceb16e00e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timeLeft: 10
 --- !u!1 &1818621308
 GameObject:
   m_ObjectHideFlags: 0
