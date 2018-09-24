@@ -17,7 +17,7 @@ public class time : MonoBehaviour {
         timeLeft -= Time.deltaTime;
         if (timeLeft < 0)
         {
-            print("Time Over!");
+           // print("Time Over!");
         }
     }
 }

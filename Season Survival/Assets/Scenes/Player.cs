@@ -10,12 +10,15 @@ public class Player : MonoBehaviour
     private Rigidbody rb;
     public Animator animator;
     public float PickUpRange = 2;
-    public float MaxSpeed = 0.5f;
-    private Vector3 CurrentSpeed;
-    public float Acceleration = 0.2f;
-    [Range(0,1)]
-    public float Friction = 0.9f;
-    public float InvPercent;
+   // public float MaxSpeed = 0.5f;
+   // private Vector3 CurrentSpeed;
+    public float Acceleration = 1f;
+    public float RestingDrag = 5f;
+    public float MovingDrag = 0;
+
+    // [Range(0,1)]
+    // public float Friction = 0.9f;
+    // public float InvPercent;
     public bool IsPunching = false;
     public bool IsFlipped = false;
 
@@ -30,23 +33,23 @@ public class Player : MonoBehaviour
     {
         Gizmos.DrawWireSphere(this.transform.position, PickUpRange);
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(transform.position, transform.position+ CurrentSpeed *10);
+   //     Gizmos.DrawLine(transform.position, transform.position+ CurrentSpeed *10);
     }
 
     public void calcInvPercent()
     {
-        InvPercent = Inventory.CurrentResource / Inventory.MaxResource;
+       // InvPercent = Inventory.CurrentResource / Inventory.MaxResource;
     }
 
     private void doAnimation()
     {
-        animator.SetFloat("Velocity", CurrentSpeed.magnitude * 20);
-        if(CurrentSpeed.x < 0 && IsFlipped == false)
+        animator.SetFloat("Velocity", rb.velocity.magnitude * 20);
+        if(rb.velocity.x < 0 && IsFlipped == false)
         {
             IsFlipped = true;
             animator.gameObject.transform.localScale = new Vector3(animator.gameObject.transform.localScale.x *-1f, animator.gameObject.transform.localScale.y, animator.gameObject.transform.localScale.z);
         }
-        if (CurrentSpeed.x > 0 && IsFlipped == true)
+        if (rb.velocity.x > 0 && IsFlipped == true)
         {
             IsFlipped = false;
             animator.gameObject.transform.localScale = new Vector3(animator.gameObject.transform.localScale.x * -1f, animator.gameObject.transform.localScale.y, animator.gameObject.transform.localScale.z);
@@ -76,38 +79,22 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        //Vector3 dir = Vector3.zero;
+       Vector3 dir = Vector3.zero;
+
+        if (GetAxis("Horizontal") == 0 && GetAxis("Vertical") == 0)
+        {
+            rb.drag = RestingDrag;
+        }
+        else
+        {
+            rb.drag = MovingDrag;
+        }
      
 
-
-
-        if (GetAxis("Horizontal") != 0)
-        {
-            if (CurrentSpeed.x < MaxSpeed)
-                CurrentSpeed.x += Acceleration * Time.deltaTime * GetAxis("Horizontal");
-
-        }
-        else
-        {
-            CurrentSpeed = new Vector3(CurrentSpeed.x * Friction, CurrentSpeed.y, CurrentSpeed.z);
-        }
-        if (GetAxis("Vertical") != 0)
-        {
-            if (CurrentSpeed.z < MaxSpeed)
-                CurrentSpeed.z += Acceleration * Time.deltaTime * GetAxis("Vertical");
-
-        }
-        else
-        {
-            CurrentSpeed = new Vector3(CurrentSpeed.x, CurrentSpeed.y, CurrentSpeed.z * Friction);
-
-
-        }
-
-
-        rb.MovePosition(transform.position += CurrentSpeed);
+        dir = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
+       // rb.MovePosition(transform.position += CurrentSpeed);
         //0.
-        //  rb.AddForce(dir, ForceMode.Acceleration);
+          rb.AddForce(dir * Acceleration, ForceMode.Acceleration);
 
         if (animator != null)
             doAnimation();
@@ -119,12 +106,13 @@ public class Player : MonoBehaviour
     bool GetButtonDown(string buttonName)
     {
        
-        return Input.GetButtonDown(player.ToString() + buttonName);
+        return Input.GetButtonDown(player.ToString()+buttonName);
     }
     void doInput()
     {
         if (GetButtonDown("Fire1"))
         {
+            Debug.Log(gameObject);
             IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
             {
@@ -145,6 +133,8 @@ public class Player : MonoBehaviour
         }
         if (GetButtonDown("Fire2"))
         {
+            Debug.Log(gameObject);
+
             IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
             {
@@ -164,6 +154,8 @@ public class Player : MonoBehaviour
         }
         if (GetButtonDown("Fire3"))
         {
+            Debug.Log(gameObject);
+
             if (Inventory.CurrentResource >= 1)
             {
                 Inventory.CurrentResource--;
@@ -176,7 +168,7 @@ public class Player : MonoBehaviour
             {
                 CurrentSpeed *= 4;
             }*/
-            CurrentSpeed *= 4;
+          //  CurrentSpeed *= 4;
         }
     }
     public void OnTriggerEnter(Collider other)
