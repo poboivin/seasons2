@@ -8,6 +8,8 @@ public class ResourceInventory : MonoBehaviour
     public int MaxResource = 5;
     public int CurrentResource = 0;
     public bool Harvestable = false;
+    public bool isPlayer = true;
+
     public Text text;
 	// Use this for initialization
 	void Start ()
