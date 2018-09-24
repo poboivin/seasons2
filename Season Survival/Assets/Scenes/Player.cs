@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public enum PlayerNumber {  P1,P2,P3,P4}
+    public PlayerNumber player;
     public ResourceInventory Inventory;
     private Rigidbody rb;
     public Animator animator;
@@ -15,6 +17,8 @@ public class Player : MonoBehaviour
     public float Friction = 0.9f;
     public float InvPercent;
     public bool IsPunching = false;
+    public bool IsFlipped = false;
+
     // Use this for initialization
     public void Start ()
     {
@@ -36,8 +40,17 @@ public class Player : MonoBehaviour
 
     private void doAnimation()
     {
-        animator.SetFloat("Velocity", CurrentSpeed.magnitude * 10);
-       
+        animator.SetFloat("Velocity", CurrentSpeed.magnitude * 20);
+        if(CurrentSpeed.x < 0 && IsFlipped == false)
+        {
+            IsFlipped = true;
+            animator.gameObject.transform.localScale = new Vector3(animator.gameObject.transform.localScale.x *-1f, animator.gameObject.transform.localScale.y, animator.gameObject.transform.localScale.z);
+        }
+        if (CurrentSpeed.x > 0 && IsFlipped == true)
+        {
+            IsFlipped = false;
+            animator.gameObject.transform.localScale = new Vector3(animator.gameObject.transform.localScale.x * -1f, animator.gameObject.transform.localScale.y, animator.gameObject.transform.localScale.z);
+        }
         if (Inventory.CurrentResource > 0)
         {
             animator.SetBool("Mouth", true);
@@ -54,6 +67,12 @@ public class Player : MonoBehaviour
             IsPunching = false;
         }
     }
+
+    public float GetAxis(string axisName)
+    {
+
+        return Input.GetAxis(player.ToString()+axisName);
+    }
     // Update is called once per frame
     public void Update()
     {
@@ -62,20 +81,20 @@ public class Player : MonoBehaviour
 
 
 
-        if (Input.GetAxis("Horizontal") != 0)
+        if (GetAxis("Horizontal") != 0)
         {
             if (CurrentSpeed.x < MaxSpeed)
-                CurrentSpeed.x += Acceleration * Time.deltaTime * Input.GetAxis("Horizontal");
+                CurrentSpeed.x += Acceleration * Time.deltaTime * GetAxis("Horizontal");
 
         }
         else
         {
             CurrentSpeed = new Vector3(CurrentSpeed.x * Friction, CurrentSpeed.y, CurrentSpeed.z);
         }
-        if (Input.GetAxis("Vertical") != 0)
+        if (GetAxis("Vertical") != 0)
         {
             if (CurrentSpeed.z < MaxSpeed)
-                CurrentSpeed.z += Acceleration * Time.deltaTime * Input.GetAxis("Vertical");
+                CurrentSpeed.z += Acceleration * Time.deltaTime * GetAxis("Vertical");
 
         }
         else
@@ -96,9 +115,15 @@ public class Player : MonoBehaviour
 
         doInput();
     }
+
+    bool GetButtonDown(string buttonName)
+    {
+       
+        return Input.GetButtonDown(player.ToString() + buttonName);
+    }
     void doInput()
     {
-        if (Input.GetKeyDown(KeyCode.B))
+        if (GetButtonDown("Fire1"))
         {
             IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
@@ -118,7 +143,7 @@ public class Player : MonoBehaviour
             }
 
         }
-        if (Input.GetKeyDown(KeyCode.N))
+        if (GetButtonDown("Fire2"))
         {
             IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
@@ -137,7 +162,7 @@ public class Player : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.M))
+        if (GetButtonDown("Fire3"))
         {
             if (Inventory.CurrentResource >= 1)
             {
@@ -145,7 +170,7 @@ public class Player : MonoBehaviour
                 Instantiate(ResourceSpawner.ResourcePrefab, transform.position, transform.rotation);
             }
         }
-        if (Input.GetKeyDown(KeyCode.H))
+        if (GetButtonDown("Jump"))
         {
             /*while (CurrentSpeed.x < MaxSpeed && CurrentSpeed.z < MaxSpeed)
             {
