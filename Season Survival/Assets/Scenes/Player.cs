@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     public ResourceInventory Inventory;
     private Rigidbody rb;
+    public Animator animator;
     public float PickUpRange = 2;
     public float MaxSpeed = 0.5f;
     private Vector3 CurrentSpeed;
@@ -13,12 +14,14 @@ public class Player : MonoBehaviour
     [Range(0,1)]
     public float Friction = 0.9f;
     public float InvPercent;
-
+    public bool IsPunching = false;
     // Use this for initialization
     public void Start ()
     {
         rb = gameObject.GetComponent<Rigidbody>();
-	}
+        animator = gameObject.GetComponentInChildren<Animator>();
+
+    }
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(this.transform.position, PickUpRange);
@@ -31,11 +34,33 @@ public class Player : MonoBehaviour
         InvPercent = Inventory.CurrentResource / Inventory.MaxResource;
     }
 
+    private void doAnimation()
+    {
+        animator.SetFloat("Velocity", CurrentSpeed.magnitude * 10);
+       
+        if (Inventory.CurrentResource > 0)
+        {
+            animator.SetBool("Mouth", true);
+        }
+        else
+        {
+            animator.SetBool("Mouth", false);
+
+        }
+
+        if (IsPunching)
+        {
+            animator.SetTrigger("Punch");
+            IsPunching = false;
+        }
+    }
     // Update is called once per frame
     public void Update()
     {
-        Vector3 dir = Vector3.zero;
-        // dir +=  new Vector3(Input.GetAxis("Horizontal"),0,Input.GetAxis("Vertical"));
+        //Vector3 dir = Vector3.zero;
+     
+
+
 
         if (Input.GetAxis("Horizontal") != 0)
         {
@@ -65,9 +90,17 @@ public class Player : MonoBehaviour
         //0.
         //  rb.AddForce(dir, ForceMode.Acceleration);
 
+        if (animator != null)
+            doAnimation();
 
+
+        doInput();
+    }
+    void doInput()
+    {
         if (Input.GetKeyDown(KeyCode.B))
         {
+            IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
             {
                 Resource r = c.GetComponent<Resource>();
@@ -87,6 +120,7 @@ public class Player : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.N))
         {
+            IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
             {
                 ResourceInventory r = c.GetComponent<ResourceInventory>();
