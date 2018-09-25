@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public enum PlayerNumber {  P1,P2,P3,P4}
+    public enum PlayerNumber {  P1,P2,P3,P4, PC}
     public PlayerNumber player;
     public ResourceInventory Inventory;
     private Rigidbody rb;
@@ -74,8 +74,16 @@ public class Player : MonoBehaviour
 
     public float GetAxis(string axisName)
     {
+        if (player != PlayerNumber.PC)
+        {
+            return Input.GetAxis(player.ToString() + axisName);
 
-        return Input.GetAxis(player.ToString()+axisName);
+        }
+        else
+        {
+            return Input.GetAxis(axisName);
+
+        }
     }
     // Update is called once per frame
     public void Update()
@@ -106,8 +114,16 @@ public class Player : MonoBehaviour
 
     bool GetButtonDown(string buttonName)
     {
-       
-        return Input.GetButtonDown(player.ToString()+buttonName);
+        if (player != PlayerNumber.PC)
+        {
+            return Input.GetButtonDown(player.ToString() + buttonName);
+
+        }
+        else
+        {
+            return Input.GetButtonDown( buttonName);
+
+        }
     }
     void doInput()
     {
