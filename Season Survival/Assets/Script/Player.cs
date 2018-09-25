@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     public float Acceleration = 1f;
     public float RestingDrag = 5f;
     public float MovingDrag = 0;
+    public float InvPercent;
 
     // [Range(0,1)]
     // public float Friction = 0.9f;
@@ -38,7 +39,7 @@ public class Player : MonoBehaviour
 
     public void calcInvPercent()
     {
-       // InvPercent = Inventory.CurrentResource / Inventory.MaxResource;
+       InvPercent = Inventory.CurrentResource / Inventory.MaxResource;
     }
 
     private void doAnimation()
@@ -94,7 +95,7 @@ public class Player : MonoBehaviour
         dir = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
        // rb.MovePosition(transform.position += CurrentSpeed);
         //0.
-          rb.AddForce(dir * Acceleration, ForceMode.Acceleration);
+          rb.AddForce(dir * (Acceleration - InvPercent), ForceMode.Acceleration);
 
         if (animator != null)
             doAnimation();
