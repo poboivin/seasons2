@@ -171,6 +171,11 @@ Prefab:
       propertyPath: Friction
       value: 0.172
       objectReference: {fileID: 0}
+    - target: {fileID: 54889641606074560, guid: 24d931d43ed8dc74ea4d5e6934c61db6,
+        type: 2}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 24d931d43ed8dc74ea4d5e6934c61db6, type: 2}
   m_IsPrefabAsset: 0

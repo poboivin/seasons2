@@ -16,6 +16,7 @@ public class Player : MonoBehaviour
     public float RestingDrag = 5f;
     public float MovingDrag = 0;
     public float InvPercent;
+    public float Mass;
 
     // [Range(0,1)]
     // public float Friction = 0.9f;
@@ -28,7 +29,7 @@ public class Player : MonoBehaviour
     {
         rb = gameObject.GetComponent<Rigidbody>();
         animator = gameObject.GetComponentInChildren<Animator>();
-
+        Mass = rb.mass;
     }
     private void OnDrawGizmos()
     {
@@ -103,7 +104,7 @@ public class Player : MonoBehaviour
         dir = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
        // rb.MovePosition(transform.position += CurrentSpeed);
         //0.
-          rb.AddForce(dir * (Acceleration - InvPercent), ForceMode.Acceleration);
+          rb.AddForce(dir * Acceleration, ForceMode.Force);
 
         if (animator != null)
             doAnimation();
