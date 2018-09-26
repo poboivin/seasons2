@@ -16,7 +16,17 @@ public class ResourceInventory : MonoBehaviour
     {
 		
 	}
-	
+	public void drop(int num)
+    {
+        for(int i = 0; i< num; i++)
+        {
+            if(CurrentResource >= num)
+            {
+                Instantiate(ResourceSpawner.ResourcePrefab, transform.position, transform.rotation);
+
+            }
+        }
+    }
 	// Update is called once per frame
 	void Update ()
     {
