@@ -16,14 +16,15 @@ public class ResourceInventory : MonoBehaviour
     {
 		
 	}
-	public void drop(int num)
+	public void Drop(int num,Vector3 pos)
     {
         for(int i = 0; i< num; i++)
         {
             if(CurrentResource >= num)
             {
-                Instantiate(ResourceSpawner.ResourcePrefab, transform.position, transform.rotation);
 
+                Instantiate(ResourceSpawner.ResourcePrefab, pos, transform.rotation);
+                CurrentResource--;
             }
         }
     }

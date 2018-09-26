@@ -90,7 +90,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1273263553522024}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.916, y: 0.59, z: 0.129}
+  m_LocalPosition: {x: -16.21, y: 0.59, z: -6.76}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 224342047087282712}
@@ -160,7 +160,7 @@ Rigidbody:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1273263553522024}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 1.5
   m_Drag: 1.37
   m_AngularDrag: 0.05
   m_UseGravity: 0
@@ -242,14 +242,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b94068f33975c52408680efd3ace7c26, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: 0
   Inventory: {fileID: 114995057866012730}
   animator: {fileID: 95064280896881216}
   PickUpRange: 1.2
-  MaxSpeed: 2
-  Acceleration: 0.1
-  Friction: 0.1
-  InvPercent: 0
+  Acceleration: 4
+  RestingDrag: 3
+  MovingDrag: 0.5
+  Mass: 0
+  DashCoolDown: 6
+  FoodWeight: 1.5
+  dashTimer: 2
   IsPunching: 0
+  IsFlipped: 0
 --- !u!114 &114995057866012730
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -264,6 +269,7 @@ MonoBehaviour:
   MaxResource: 3
   CurrentResource: 0
   Harvestable: 1
+  isPlayer: 1
   text: {fileID: 114130939466977648}
 --- !u!114 &114995432910894342
 MonoBehaviour:

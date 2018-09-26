@@ -15,15 +15,16 @@ public class Player : MonoBehaviour
     public float Acceleration = 1f;
     public float RestingDrag = 5f;
     public float MovingDrag = 0;
-    public float InvPercent;
     public float Mass;
-
+    public float DashCoolDown = 2f;
+    public float FoodWeight = 1.5f;
+    public float dashTimer = 2f;
     // [Range(0,1)]
     // public float Friction = 0.9f;
     // public float InvPercent;
     public bool IsPunching = false;
     public bool IsFlipped = false;
-
+    Vector3 dir;
     // Use this for initialization
     public void Start ()
     {
@@ -38,14 +39,11 @@ public class Player : MonoBehaviour
    //     Gizmos.DrawLine(transform.position, transform.position+ CurrentSpeed *10);
     }
 
-    public void calcInvPercent()
-    {
-       InvPercent = Inventory.CurrentResource / Inventory.MaxResource;
-    }
+  
 
     private void doAnimation()
     {
-        animator.SetFloat("Velocity", rb.velocity.magnitude * 20);
+        animator.SetFloat("Velocity", rb.velocity.magnitude );
         if(rb.velocity.x < 0 && IsFlipped == false)
         {
             IsFlipped = true;
@@ -86,11 +84,18 @@ public class Player : MonoBehaviour
 
         }
     }
+    //fixed updated is called once per physic step
+    public void FixedUpdate()
+    {
+        rb.AddForce(dir * Acceleration, ForceMode.Force);
+    }
     // Update is called once per frame
+
     public void Update()
     {
-       Vector3 dir = Vector3.zero;
+        rb.mass = Mass + FoodWeight *Inventory.CurrentResource;
 
+        //physics
         if (GetAxis("Horizontal") == 0 && GetAxis("Vertical") == 0)
         {
             rb.drag = RestingDrag;
@@ -99,17 +104,17 @@ public class Player : MonoBehaviour
         {
             rb.drag = MovingDrag;
         }
-     
+       
 
-        dir = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
-       // rb.MovePosition(transform.position += CurrentSpeed);
-        //0.
-          rb.AddForce(dir * Acceleration, ForceMode.Force);
 
         if (animator != null)
             doAnimation();
+        if(dashTimer > 0)
+        {
+            dashTimer -= Time.deltaTime;
+        }
 
-
+        //button input
         doInput();
     }
 
@@ -128,9 +133,13 @@ public class Player : MonoBehaviour
     }
     void doInput()
     {
+        //joystick input
+        dir = new Vector3(GetAxis("Horizontal"), 0, GetAxis("Vertical"));
+
+        //pick up 
         if (GetButtonDown("Fire1"))
         {
-            Debug.Log(gameObject);
+            rb.velocity = Vector3.zero;
             IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
             {
@@ -141,7 +150,6 @@ public class Player : MonoBehaviour
                     if (Inventory.CurrentResource < Inventory.MaxResource)
                     {
                         Inventory.CurrentResource++;
-                        Mass += 1;
                         Destroy(c.gameObject);
                     }
 
@@ -150,28 +158,32 @@ public class Player : MonoBehaviour
             }
 
         }
+        //hit
         if (GetButtonDown("Fire2"))
         {
             Debug.Log(gameObject);
 
-            IsPunching = true;
             foreach (Collider c in Physics.OverlapSphere(transform.position, PickUpRange))
             {
                 ResourceInventory r = c.GetComponent<ResourceInventory>();
 
-                if (r != null)
+                if (r != null && r.transform != this.transform)
                 {
+                    IsPunching = true;
+
                     if (Inventory.CurrentResource < Inventory.MaxResource && r.CurrentResource >= 1)
                     {
-                        Inventory.CurrentResource++;
-                        Mass -= 1;
-                        r.CurrentResource--;
+                        r.Drop(1,Vector3.Lerp(this.transform.position,r.transform.position,0.5f));
+                        //Inventory.CurrentResource++;
+                        //Mass -= 1;
+                       // r.CurrentResource--;
                     }
 
                     break;
                 }
             }
         }
+        //drop
         if (GetButtonDown("Fire3"))
         {
             Debug.Log(gameObject);
@@ -179,19 +191,17 @@ public class Player : MonoBehaviour
             if (Inventory.CurrentResource >= 1)
             {
                 Inventory.CurrentResource--;
-                Mass -= 1;
                 Instantiate(ResourceSpawner.ResourcePrefab, transform.position, transform.rotation);
             }
         }
-        if (GetButtonDown("Jump"))
+        //dash
+        if (GetButtonDown("Jump") && dashTimer <= 0)
         {
-            /*while (CurrentSpeed.x < MaxSpeed && CurrentSpeed.z < MaxSpeed)
-            {
-                CurrentSpeed *= 4;
-            }*/
-          //  CurrentSpeed *= 4;
+            rb.AddForce(dir * Acceleration, ForceMode.VelocityChange);
+            dashTimer = DashCoolDown;
         }
     }
+   
     public void OnTriggerEnter(Collider other)
     {
         
