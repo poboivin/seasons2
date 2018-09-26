@@ -141,6 +141,7 @@ public class Player : MonoBehaviour
                     if (Inventory.CurrentResource < Inventory.MaxResource)
                     {
                         Inventory.CurrentResource++;
+                        Mass += 1;
                         Destroy(c.gameObject);
                     }
 
@@ -163,6 +164,7 @@ public class Player : MonoBehaviour
                     if (Inventory.CurrentResource < Inventory.MaxResource && r.CurrentResource >= 1)
                     {
                         Inventory.CurrentResource++;
+                        Mass -= 1;
                         r.CurrentResource--;
                     }
 
@@ -177,6 +179,7 @@ public class Player : MonoBehaviour
             if (Inventory.CurrentResource >= 1)
             {
                 Inventory.CurrentResource--;
+                Mass -= 1;
                 Instantiate(ResourceSpawner.ResourcePrefab, transform.position, transform.rotation);
             }
         }
