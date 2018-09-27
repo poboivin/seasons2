@@ -18,7 +18,8 @@ public class time : MonoBehaviour {
     public bool Transition;
     public Transform[] Bases;
     public Text EndGameText;
-    
+    public Text SeasonText;
+
     public void restart()
     {
         SceneManager.LoadScene(0);
@@ -63,7 +64,7 @@ public class time : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         currentTime -= Time.deltaTime;
-
+        SeasonText.text = currentSeason.ToString();
         if (currentTime < 0 && Transition == false)
         {
             Transition = true;
