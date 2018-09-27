@@ -1,7 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 public class time : MonoBehaviour {
 
     public float TransitionTime = 20;
@@ -15,6 +16,13 @@ public class time : MonoBehaviour {
     public enum Season {  Winter,Spring,Summer,Fall};
     public Season currentSeason = Season.Winter;
     public bool Transition;
+    public Transform[] Bases;
+    public Text EndGameText;
+    
+    public void restart()
+    {
+        SceneManager.LoadScene(0);
+    }
     // Use this for initialization
     void Start () {
         currentSeason = Season.Winter;
@@ -22,7 +30,36 @@ public class time : MonoBehaviour {
         currentTime = SeasonTime;
         ground.GetComponent<MeshRenderer>().material.color = Winter;
     }
-	
+	public void GameOver()
+    {
+        int WinnerIndex = 0;
+        int Winnercount = 0 ;
+        for (int i = 0; i < Bases.Length;i++) 
+        {
+            int num = 0;
+            foreach (Collider c in Physics.OverlapSphere(Bases[i].position, 3))
+            {
+                Resource r = c.GetComponent<Resource>();
+
+                if (r != null)
+                {
+                    num++;
+                }
+            }
+            if(num > Winnercount)
+            {
+                Winnercount = num;
+                WinnerIndex = i;
+            }
+        }
+        Debug.Log("winner is " + Bases[WinnerIndex].name.ToString());
+        if (EndGameText != null)
+        {
+            EndGameText.transform.parent.gameObject.SetActive(true);
+            EndGameText.text = "winner is " + Bases[WinnerIndex].name.ToString();
+
+        }
+    }
 	// Update is called once per frame
 	void Update () {
         currentTime -= Time.deltaTime;
@@ -71,6 +108,8 @@ public class time : MonoBehaviour {
                         currentSeason = Season.Winter;
                         Transition = false;
                         currentTime = SeasonTime;
+                        GameOver();
+
                     }
                     break;
             }
