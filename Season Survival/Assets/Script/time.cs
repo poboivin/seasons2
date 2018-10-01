@@ -19,7 +19,8 @@ public class time : MonoBehaviour {
     public Transform[] Bases;
     public Text EndGameText;
     public Text SeasonText;
-
+    public ResourceInventory tree;
+    public int replenishAmount = 5;
     public void restart()
     {
         SceneManager.LoadScene(0);
@@ -82,6 +83,15 @@ public class time : MonoBehaviour {
                         currentSeason = Season.Spring;
                         Transition = false;
                         currentTime = SeasonTime;
+                        if (tree.CurrentResource + replenishAmount < tree.MaxResource)
+                        {
+                            tree.CurrentResource += replenishAmount;
+
+                        }
+                        else
+                        {
+                            tree.CurrentResource = tree.MaxResource;
+                        }
                     }
                     break;
                 case Season.Spring:
@@ -91,6 +101,15 @@ public class time : MonoBehaviour {
                         currentSeason = Season.Summer;
                         Transition = false;
                         currentTime = SeasonTime;
+                        if (tree.CurrentResource + replenishAmount < tree.MaxResource)
+                        {
+                            tree.CurrentResource += replenishAmount;
+
+                        }
+                        else
+                        {
+                            tree.CurrentResource = tree.MaxResource;
+                        }
                     }
                     break;
                 case Season.Summer:
@@ -100,6 +119,15 @@ public class time : MonoBehaviour {
                         currentSeason = Season.Fall;
                         Transition = false;
                         currentTime = SeasonTime;
+                        if (tree.CurrentResource + replenishAmount < tree.MaxResource)
+                        {
+                            tree.CurrentResource += replenishAmount;
+
+                        }
+                        else
+                        {
+                            tree.CurrentResource = tree.MaxResource;
+                        }
                     }
                     break;
                 case Season.Fall:
