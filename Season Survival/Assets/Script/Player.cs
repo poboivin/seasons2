@@ -13,6 +13,8 @@ public class Player : MonoBehaviour
    // public float MaxSpeed = 0.5f;
    // private Vector3 CurrentSpeed;
     public float Acceleration = 1f;
+    public float DashAcceleration = 4f;
+
     public float RestingDrag = 5f;
     public float MovingDrag = 0;
     public float Mass;
@@ -197,7 +199,7 @@ public class Player : MonoBehaviour
         //dash
         if (GetButtonDown("Jump") && dashTimer <= 0)
         {
-            rb.AddForce(dir * Acceleration, ForceMode.VelocityChange);
+            rb.AddForce(dir * DashAcceleration, ForceMode.VelocityChange);
             dashTimer = DashCoolDown;
         }
     }
