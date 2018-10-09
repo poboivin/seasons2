@@ -73,19 +73,7 @@ public class Player : MonoBehaviour
         }
     }
 
-    public float GetAxis(string axisName)
-    {
-        if (player != PlayerNumber.PC)
-        {
-            return Input.GetAxis(player.ToString() + axisName);
-
-        }
-        else
-        {
-            return Input.GetAxis(axisName);
-
-        }
-    }
+   
     //fixed updated is called once per physic step
     public void FixedUpdate()
     {
@@ -119,7 +107,19 @@ public class Player : MonoBehaviour
         //button input
         doInput();
     }
+    public float GetAxis(string axisName)
+    {
+        if (player != PlayerNumber.PC)
+        {
+            return Input.GetAxis(player.ToString() + axisName);
 
+        }
+        else
+        {
+            return Input.GetAxis(axisName);
+
+        }
+    }
     bool GetButtonDown(string buttonName)
     {
         if (player != PlayerNumber.PC)
